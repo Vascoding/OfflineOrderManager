@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,9 +28,13 @@ namespace OfflineOrderManager.Web
             services.AddDbContext<OfflineOrderManagerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
             services.AddTransient<IUserService, UserService>();
             services.AddSingleton<IMappingService, MappingService>();
 
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -41,8 +46,7 @@ namespace OfflineOrderManager.Web
             services.AddMvc(option =>
             {
                 option.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-            })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +62,7 @@ namespace OfflineOrderManager.Web
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.CreateDatabase();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

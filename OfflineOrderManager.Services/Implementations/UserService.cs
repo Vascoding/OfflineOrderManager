@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using OfflineOrderManager.Data;
 using OfflineOrderManager.Models.Data.Users;
 using OfflineOrderManager.Models.Services.Registration;
@@ -17,7 +18,7 @@ namespace OfflineOrderManager.Services.Implementations
             this.mapper = mapper;
         }
 
-        public async Task RegisterUser(RegisterServiceModel model)
+        public async Task RegisterUser(UserServiceModel model)
         {
             var user = this.mapper.Map<User>(model);
 
@@ -25,5 +26,10 @@ namespace OfflineOrderManager.Services.Implementations
 
             await dbContext.SaveChangesAsync();
         }
+
+        public bool Exists(UserServiceModel model) =>
+            this.dbContext
+            .Users
+            .Any(u => u.Name == model.Name && u.Password == model.Password);
     }
 }

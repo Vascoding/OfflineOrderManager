@@ -1,8 +1,40 @@
 ﻿@page
-@model OfflineOrderManager.Web.Pages.LoginModel
+@model LoginModel
 @{
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Log in</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a asp-page="Register">Register as a new user?</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
 
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

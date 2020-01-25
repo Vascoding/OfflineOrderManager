@@ -26,7 +26,7 @@ namespace OfflineOrderManager.Web.Pages
 
         public async Task OnPost()
         {
-            await this.userService.RegisterUser(new RegisterServiceModel
+            await this.userService.RegisterUser(new UserServiceModel
             {
                 Name = this.Name,
                 Password = this.Password

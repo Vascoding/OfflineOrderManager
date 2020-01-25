@@ -1,6 +1,6 @@
 ﻿namespace OfflineOrderManager.Models.Services.Registration
 {
-    public class RegisterServiceModel
+    public class UserServiceModel
     {
         public string Name { get; set; }
 

@@ -5,6 +5,7 @@ namespace OfflineOrderManager.Services.Contracts
 {
     public interface IUserService
     {
-        Task RegisterUser(RegisterServiceModel model);
+        Task RegisterUser(UserServiceModel model);
+        bool Exists(UserServiceModel model);
     }
 }

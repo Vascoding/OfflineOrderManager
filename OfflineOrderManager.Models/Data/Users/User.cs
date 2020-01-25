@@ -5,7 +5,7 @@ using OfflineOrderManager.Utils.AutoMapper.Contracts;
 
 namespace OfflineOrderManager.Models.Data.Users
 {
-    public class User : IMapFrom<RegisterServiceModel>
+    public class User : IMapFrom<UserServiceModel>
     {
         public int Id { get; set; }
 

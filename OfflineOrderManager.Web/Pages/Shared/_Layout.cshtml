@@ -34,8 +34,15 @@
                     <li><a asp-page="/MyOrders">My Orders</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-page="/Register">Register</a></li>
-                    <li><a asp-page="/Login">Login</a></li>
+                    @if (Model.HttpContext.User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-page="/Login" asp-page-handler="Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-page="/Register">Register</a></li>
+                        <li><a asp-page="/Login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -47,7 +54,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2020 - OfflineOrderManager.Web</p>
+            <p>&copy; 2020 - OfflineOrderManager</p>
         </footer>
     </div>
 
