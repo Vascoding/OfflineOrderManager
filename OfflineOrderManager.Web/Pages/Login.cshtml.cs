@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace OfflineOrderManager.Web.Pages
 {
-    public class PrivacyModel : PageModel
+    public class LoginModel : PageModel
     {
         public void OnGet()
         {
+
         }
     }
 }

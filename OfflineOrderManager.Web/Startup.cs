@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OfflineOrderManager.Data;
+using OfflineOrderManager.Services.Contracts;
+using OfflineOrderManager.Services.Implementations;
+using OfflineOrderManager.Web.Extensions;
 
 namespace OfflineOrderManager.Web
 {
@@ -24,6 +27,9 @@ namespace OfflineOrderManager.Web
             services.AddDbContext<OfflineOrderManagerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddTransient<IUserService, UserService>();
+            services.AddSingleton<IMappingService, MappingService>();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -32,7 +38,11 @@ namespace OfflineOrderManager.Web
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(option =>
+            {
+                option.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +58,7 @@ namespace OfflineOrderManager.Web
                 app.UseHsts();
             }
 
+            app.CreateDatabase();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

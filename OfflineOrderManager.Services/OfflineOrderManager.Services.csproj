@@ -9,9 +9,4 @@
     <ProjectReference Include="..\OfflineOrderManager.Models\OfflineOrderManager.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Implementations\" />
-  </ItemGroup>
-
 </Project>
