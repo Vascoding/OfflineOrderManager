@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using OfflineOrderManager.Data;
 using OfflineOrderManager.Models.Data.Users;
@@ -18,8 +20,10 @@ namespace OfflineOrderManager.Services.Implementations
             this.mapper = mapper;
         }
 
-        public async Task RegisterUser(UserServiceModel model)
+        public async Task Register(UserServiceModel model)
         {
+            model.Password = this.ComputeSha256Hash(model.Password);
+
             var user = this.mapper.Map<User>(model);
 
             await dbContext.AddAsync(user);
@@ -27,9 +31,27 @@ namespace OfflineOrderManager.Services.Implementations
             await dbContext.SaveChangesAsync();
         }
 
-        public bool Exists(UserServiceModel model) =>
+        public bool Exists(string userName) =>
             this.dbContext
             .Users
-            .Any(u => u.Name == model.Name && u.Password == model.Password);
+            .Any(u => u.Name == userName);
+
+        public bool Exists(UserServiceModel model) => 
+            this.dbContext
+            .Users
+            .FirstOrDefault(u => u.Name == model.Name && u.Password == this.ComputeSha256Hash(model.Password)) != null;
+
+        private string ComputeSha256Hash(string password)
+        {
+            byte[] bytes = new SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                sb.Append(bytes[i].ToString("x2"));
+            }
+            return sb.ToString();
+        }
     }
 }

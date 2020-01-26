@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfflineOrderManager.Models.Services.Registration;
 using OfflineOrderManager.Services.Contracts;
+using OfflineOrderManager.Web.Extensions;
 
 namespace OfflineOrderManager.Web.Pages
 {
@@ -24,9 +23,11 @@ namespace OfflineOrderManager.Web.Pages
 
         public string Password { get; set; }
 
+        public string ErrorMessage { get; set; }
+
         public void OnGet() { }
 
-        public async Task OnPost()
+        public async Task<IActionResult> OnPost()
         {
             var model = new UserServiceModel
             {
@@ -36,22 +37,20 @@ namespace OfflineOrderManager.Web.Pages
 
             if (!this.userService.Exists(model))
             {
-                return;
+                TempData["ErrorMessage"] = "Invalid User Credentials";
+                return RedirectToPage();
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, model.Name),
-            };
+            this.SignInAsync(model.Name);
 
-            var claimsIdentity = new ClaimsIdentity(claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity));
+            return RedirectToPage("Index");
         }
 
-        public async void OnGetLogout() => 
+        public async Task<IActionResult> OnGetLogout()
+        {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToPage("Index");
+        }
     }
 }
