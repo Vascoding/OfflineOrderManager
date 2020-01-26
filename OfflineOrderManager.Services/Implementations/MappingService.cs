@@ -9,6 +9,7 @@ namespace OfflineOrderManager.Services.Implementations
     public class MappingService : IMappingService
     {
         private Mapper mapper;
+        
         public MappingService()
         {
             var configurations = new MapperConfiguration(cfg =>
