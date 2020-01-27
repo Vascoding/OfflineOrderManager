@@ -32,6 +32,7 @@ namespace OfflineOrderManager.Web
                 .AddCookie();
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IOrderService, OrderService>();
             services.AddSingleton<IMappingService, MappingService>();
 
             

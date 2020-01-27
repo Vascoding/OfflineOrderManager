@@ -31,7 +31,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/MyOrders">My Orders</a></li>
+                    <li><a asp-page="/Orders/My">My Orders</a></li>
+                    <li><a asp-page="/Orders/All">All Orders</a></li>
+                    <li><a asp-page="/Orders/Add">Add Order</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Model.HttpContext.User.Identity.IsAuthenticated)

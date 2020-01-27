@@ -1,8 +1,10 @@
 ﻿using OfflineOrderManager.Models.Data.Users;
+using OfflineOrderManager.Models.Services.Orders;
+using OfflineOrderManager.Utils.AutoMapper.Contracts;
 
 namespace OfflineOrderManager.Models.Data.Orders
 {
-    public class Order
+    public class Order : IMapFrom<OrderServiceModel>
     {
         public int Id { get; set; }
 
