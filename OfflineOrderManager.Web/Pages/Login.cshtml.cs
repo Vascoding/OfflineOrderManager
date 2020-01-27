@@ -41,14 +41,14 @@ namespace OfflineOrderManager.Web.Pages
                 return RedirectToPage();
             }
 
-            this.SignInAsync(model.Name);
+            await this.SignInAsync(model.Name);
 
             return RedirectToPage("Index");
         }
 
         public async Task<IActionResult> OnGetLogout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await this.SignOutAsync();
 
             return RedirectToPage("Index");
         }
