@@ -47,7 +47,7 @@ namespace OfflineOrderManager.Web.Pages
 
             await this.userService.Register(user);
 
-            this.SignInAsync(user.Name);
+            await this.SignInAsync(user.Name);
 
             return RedirectToPage("Index");
         }

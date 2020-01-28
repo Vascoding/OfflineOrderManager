@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfflineOrderManager.Models.Services.Orders;
 using OfflineOrderManager.Services.Contracts;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace OfflineOrderManager.Web.Pages.Orders
@@ -18,11 +20,20 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
         public string ProductName { get; set; }
 
-        public string Description { get; set; }
+        public decimal Amount { get; set; }
+
+        public decimal Payed { get; set; }
+
+        public decimal LeftToPay { get; set; }
+
+        public string Comment { get; set; }
 
         public string CustomerName { get; set; }
 
+        [Required]
         public string CustormerPhoneNumber { get; set; }
+
+        public int Status { get; set; }
 
         public void OnGet() { }
 
@@ -33,7 +44,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 ProductName = this.ProductName,
                 CustomerName = this.CustomerName,
                 CustormerPhoneNumber = this.CustormerPhoneNumber,
-                Description = this.Description
+                Comment = this.Comment
             };
 
             if (!this.User.Identity.IsAuthenticated)
@@ -45,7 +56,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
             await this.orderService.Add(this.User.Identity.Name, model);
 
-            return RedirectToPage("My");
+            return RedirectToPage("All");
         }
     }
 }
