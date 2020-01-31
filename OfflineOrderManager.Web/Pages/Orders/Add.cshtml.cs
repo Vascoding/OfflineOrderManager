@@ -2,20 +2,22 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfflineOrderManager.Models.Services.Orders;
 using OfflineOrderManager.Services.Contracts;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using OfflineOrderManager.Models.Data.Users;
+using OfflineOrderManager.Models.Data.Orders;
+using System;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
     [BindProperties]
     public class AddModel : PageModel
     {
-        private readonly IOrderService orderService;
+        private readonly IEntityService entityService;
 
-        public AddModel(IOrderService orderService)
+        public AddModel(IEntityService entityService)
         {
-            this.orderService = orderService;
+            this.entityService = entityService;
         }
 
         public string ProductName { get; set; }
@@ -39,14 +41,6 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
         public async Task<IActionResult> OnPost()
         {
-            var model = new OrderServiceModel
-            {
-                ProductName = this.ProductName,
-                CustomerName = this.CustomerName,
-                CustormerPhoneNumber = this.CustormerPhoneNumber,
-                Comment = this.Comment
-            };
-
             if (!this.User.Identity.IsAuthenticated)
             {
                 TempData["ErrorMessage"] = "You need to login first";
@@ -54,7 +48,23 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 return RedirectToPage();
             }
 
-            await this.orderService.Add(this.User.Identity.Name, model);
+            var user = this.entityService.Get<User>(u => u.Name == this.User.Identity.Name);
+
+            var model = new OrderServiceModel
+            {
+                ProductName = this.ProductName,
+                Amount = this.Amount,
+                Payed = this.Payed,
+                LeftToPay = this.Amount - this.Payed,
+                CustomerName = this.CustomerName,
+                CustormerPhoneNumber = this.CustormerPhoneNumber,
+                Comment = this.Comment,
+                UserId = user.Id,
+                CreationDate = DateTime.Now,
+                Status = this.Status
+            };
+
+            await this.entityService.Add<Order>(model);
 
             return RedirectToPage("All");
         }

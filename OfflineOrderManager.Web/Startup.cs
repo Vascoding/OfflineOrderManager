@@ -31,11 +31,9 @@ namespace OfflineOrderManager.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IOrderService, OrderService>();
             services.AddSingleton<IMappingService, MappingService>();
+            services.AddTransient<IEntityService, EntityService>();
 
-            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -64,11 +62,11 @@ namespace OfflineOrderManager.Web
             }
 
             app.UseAuthentication();
-            app.CreateDatabase();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.CreateDatabase();
             app.UseMvc();
         }
     }

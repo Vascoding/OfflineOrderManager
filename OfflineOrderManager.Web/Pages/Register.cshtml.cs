@@ -1,28 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using OfflineOrderManager.Models.Data.Users;
 using OfflineOrderManager.Models.Services.Registration;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Extensions;
+using OfflineOrderManager.Web.Pages.Account;
 
 namespace OfflineOrderManager.Web.Pages
 {
-    [BindProperties]
-    public class RegisterModel : PageModel
+    public class RegisterModel : AccountPageModel
     {
-        private readonly IUserService userService;
-
-        public RegisterModel(IUserService userService)
-        {
-            this.userService = userService;
-        }
-
-        [StringLength(60, MinimumLength = 3)]
-        public string Name { get; set; }
-
-        [StringLength(60, MinimumLength = 3)]
-        public string Password { get; set; }
+        public RegisterModel(IEntityService entityService)
+            : base(entityService) { }
 
         [StringLength(60, MinimumLength = 3)]
         [Compare("Password", ErrorMessage = "Confirm password doesn't match, Type again !")]
@@ -32,22 +22,24 @@ namespace OfflineOrderManager.Web.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            var user = new UserServiceModel
-            {
-                Name = this.Name,
-                Password = this.Password
-            };
+            var user = this.entityService.Get<User>(u => u.Name == this.Name);
 
-            if (this.userService.Exists(this.Name))
+            if (user != null)
             {
                 TempData["ErrorMessage"] = "User allready exists";
 
                 return RedirectToPage();
             }
 
-            await this.userService.Register(user);
+            var model = new UserServiceModel
+            {
+                Name = this.Name,
+                Password = this.ComputeSha256Hash(this.Password)
+            };
 
-            await this.SignInAsync(user.Name);
+            await this.entityService.Add<User>(model);
+
+            await this.SignInAsync(model.Name);
 
             return RedirectToPage("Index");
         }
