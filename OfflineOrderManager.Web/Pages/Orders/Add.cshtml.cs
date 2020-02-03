@@ -1,41 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using OfflineOrderManager.Models.Services.Orders;
 using OfflineOrderManager.Services.Contracts;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using OfflineOrderManager.Models.Data.Users;
 using OfflineOrderManager.Models.Data.Orders;
 using System;
+using OfflineOrderManager.Web.Pages.Abstractions.Orders;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
     [BindProperties]
-    public class AddModel : PageModel
+    public class AddModel : OrderModel
     {
-        private readonly IEntityService entityService;
-
-        public AddModel(IEntityService entityService)
-        {
-            this.entityService = entityService;
-        }
-
-        public string ProductName { get; set; }
-
-        public decimal Amount { get; set; }
-
-        public decimal Payed { get; set; }
-
-        public decimal LeftToPay { get; set; }
-
-        public string Comment { get; set; }
-
-        public string CustomerName { get; set; }
-
-        [Required]
-        public string CustormerPhoneNumber { get; set; }
-
-        public int Status { get; set; }
+        public AddModel(IEntityService entityService) 
+            : base(entityService) { }
 
         public void OnGet() { }
 
@@ -48,9 +25,9 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 return RedirectToPage();
             }
 
-            var user = this.entityService.Get<User>(u => u.Name == this.User.Identity.Name);
+            var user = this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
 
-            var model = new OrderServiceModel
+            var model = new Order
             {
                 ProductName = this.ProductName,
                 Amount = this.Amount,
@@ -61,10 +38,11 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 Comment = this.Comment,
                 UserId = user.Id,
                 CreationDate = DateTime.Now,
-                Status = this.Status
+                Status = this.Status,
+                Author = user.Name
             };
 
-            await this.entityService.Add<Order>(model);
+            await this.entityService.AddOrUpdate(model);
 
             return RedirectToPage("All");
         }

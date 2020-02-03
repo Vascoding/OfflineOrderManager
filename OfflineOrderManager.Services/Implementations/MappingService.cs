@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using OfflineOrderManager.Models.Data.Users;
-using OfflineOrderManager.Models.Services.Registration;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Utils.AutoMapper;
 

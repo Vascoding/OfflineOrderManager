@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OfflineOrderManager.Models.Data.Users;
-using OfflineOrderManager.Models.Services.Registration;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Extensions;
-using OfflineOrderManager.Web.Pages.Account;
+using OfflineOrderManager.Web.Pages.Abstractions.Account;
 
 namespace OfflineOrderManager.Web.Pages
 {
@@ -22,7 +21,7 @@ namespace OfflineOrderManager.Web.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            var user = this.entityService.Get<User>(u => u.Name == this.Name);
+            var user = this.entityService.GetBy<User>(u => u.Name == this.Name);
 
             if (user != null)
             {
@@ -31,13 +30,13 @@ namespace OfflineOrderManager.Web.Pages
                 return RedirectToPage();
             }
 
-            var model = new UserServiceModel
+            var model = new User
             {
                 Name = this.Name,
                 Password = this.ComputeSha256Hash(this.Password)
             };
 
-            await this.entityService.Add<User>(model);
+            await this.entityService.AddOrUpdate(model);
 
             await this.SignInAsync(model.Name);
 

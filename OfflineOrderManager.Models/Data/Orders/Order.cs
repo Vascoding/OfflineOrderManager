@@ -1,11 +1,10 @@
-﻿using OfflineOrderManager.Models.Data.Users;
-using OfflineOrderManager.Models.Services.Orders;
-using OfflineOrderManager.Utils.AutoMapper.Contracts;
+﻿using OfflineOrderManager.Models.Data.Contracts;
+using OfflineOrderManager.Models.Enums;
 using System;
 
 namespace OfflineOrderManager.Models.Data.Orders
 {
-    public class Order : IMapFrom<OrderServiceModel>
+    public class Order : IEntity
     {
         public int Id { get; set; }
 
@@ -25,7 +24,9 @@ namespace OfflineOrderManager.Models.Data.Orders
 
         public DateTime CreationDate { get; set; }
 
-        public int Status { get; set; }
+        public Status Status { get; set; }
+
+        public string Author { get; set; }
 
         public int UserId { get; set; }
     }

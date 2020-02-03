@@ -1,8 +1,55 @@
 ﻿@page
 @model AllModel
 @{
-    ViewData["Title"] = "All";
+    ViewData["Title"] = "Всички поръчки";
 }
 
-<h2>All</h2>
+<h2>@ViewData["Title"]</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Автор</th>
+            <th>Поръчка за</th>
+            <th>Име на клиента</th>
+            <th>Телефон</th>
+            <th>Уговорена сума на поръчаните продукти</th>
+            <th>Платена сума</th>
+            <th>Оставащо за плащане</th>
+            <th>Коментар</th>
+            <th>Статус</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Author)</td>
+            <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CustormerPhoneNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+            <td>@Html.DisplayFor(modelItem => item.Payed)</td>
+            <td>@Html.DisplayFor(modelItem => item.LeftToPay)</td>
+            <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+            <td width="140">
+                <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <div class="form-group">
+                        <select class="form-control" name="Status">
+                            <option class="bg-warning" selected="@SelectedOptionHelper.IsSelected(Status.Waiting, item.Status)" value="@Status.Waiting">Чакаща</option>
+                            <option class="bg-success" selected="@SelectedOptionHelper.IsSelected(Status.Accepted, item.Status)" value="@Status.Accepted">Изпълнена</option>
+                            <option class="bg-danger" selected="@SelectedOptionHelper.IsSelected(Status.Refused, item.Status)" value="@Status.Refused">Отказана</option>
+                        </select>
+                        <button  type="submit" asp-route-id="@item.Id" class="btn btn-primary">Смени</button>
+                    </div>
+                </form>
+            </td>
+            <td width="200">
+                <a class="btn btn-default" asp-page="./Edit" asp-route-id="@item.Id">Промени</a>
+                <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Id">Изтрий</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,9 +1,14 @@
-﻿using System;
+﻿using OfflineOrderManager.Models.Data.Orders;
+using OfflineOrderManager.Models.Enums;
+using OfflineOrderManager.Utils.AutoMapper.Contracts;
+using System;
 
-namespace OfflineOrderManager.Models.Services.Orders
+namespace OfflineOrderManager.Models.View.Orders
 {
-    public class OrderServiceModel
+    public class OrderViewModel : IMapFrom<Order>
     {
+        public int Id { get; set; }
+
         public string ProductName { get; set; }
 
         public decimal Amount { get; set; }
@@ -20,7 +25,9 @@ namespace OfflineOrderManager.Models.Services.Orders
 
         public DateTime CreationDate { get; set; }
 
-        public int Status { get; set; }
+        public Status Status { get; set; }
+
+        public string Author { get; set; }
 
         public int UserId { get; set; }
     }

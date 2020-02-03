@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="View\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\OfflineOrderManager.Utils\OfflineOrderManager.Utils.csproj" />
   </ItemGroup>
 

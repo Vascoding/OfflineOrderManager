@@ -46,9 +46,9 @@
                 <div class="form-group">
                     <label asp-for="Status">Статус</label>
                     <select class="form-control" name="Status">
-                        <option class="bg-warning" value="1">Чакаща</option>
-                        <option class="bg-success" value="2">Изпълнена</option>
-                        <option class="bg-danger" value="3">Отказана</option>
+                        <option class="bg-warning" value="@Status.Waiting">Чакаща</option>
+                        <option class="bg-success" value="@Status.Accepted">Изпълнена</option>
+                        <option class="bg-danger" value="@Status.Refused">Отказана</option>
                     </select>
                 </div>
                 <div class="form-group">

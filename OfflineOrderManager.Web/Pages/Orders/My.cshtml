@@ -1,32 +1,58 @@
 ﻿@page
 @model OfflineOrderManager.Web.Pages.Orders.MyModel
 @{
-    ViewData["Title"] = "My";
+    ViewData["Title"] = "Моите поръчки";
 }
 
-<h2>My</h2>
+<h2>@ViewData["Title"]</h2>
 
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>Add new order</h4>
-                <h4>@TempData["ErrorMessage"]</h4>
-                <hr />
-                <select name="number">
-                    <option value="">Select a number</option>
-                    <option value="1">Чакаща</option>
-                    <option value="2">Изпълнена</option>
-                    <option value="3">Отказана</option>
-                </select>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default">Add</button>
-                </div>
-            </form>
-        </section>
-    </div>
-</div>
-
+<table class="table">
+    <thead>
+        <tr>
+            <th>Автор</th>
+            <th>Поръчка за</th>
+            <th>Име на клиента</th>
+            <th>Телефон</th>
+            <th>Уговорена сума на поръчаните продукти</th>
+            <th>Платена сума</th>
+            <th>Оставащо за плащане</th>
+            <th>Коментар</th>
+            <th>Статус</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+                <td>@Html.DisplayFor(modelItem => item.CustormerPhoneNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td>@Html.DisplayFor(modelItem => item.Payed)</td>
+                <td>@Html.DisplayFor(modelItem => item.LeftToPay)</td>
+                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                <td width="140">
+                    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                        <div class="form-group">
+                            <select class="form-control" name="Status">
+                                <option class="bg-warning" selected="@SelectedOptionHelper.IsSelected(Status.Waiting, item.Status)" value="@Status.Waiting">Чакаща</option>
+                                <option class="bg-success" selected="@SelectedOptionHelper.IsSelected(Status.Accepted, item.Status)" value="@Status.Accepted">Изпълнена</option>
+                                <option class="bg-danger" selected="@SelectedOptionHelper.IsSelected(Status.Refused, item.Status)" value="@Status.Refused">Отказана</option>
+                            </select>
+                            <button type="submit" asp-route-id="@item.Id" class="btn btn-primary">Смени</button>
+                        </div>
+                    </form>
+                </td>
+                <td width="200">
+                    <a class="btn btn-default" asp-page="./Edit" asp-route-id="@item.Id">Промени</a>
+                    <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Id">Изтрий</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

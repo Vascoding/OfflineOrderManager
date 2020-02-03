@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace OfflineOrderManager.Web.Pages.Account
+namespace OfflineOrderManager.Web.Pages.Abstractions.Account
 {
     [BindProperties]
     public abstract class AccountPageModel : PageModel

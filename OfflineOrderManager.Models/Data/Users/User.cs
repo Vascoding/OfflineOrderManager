@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
+using OfflineOrderManager.Models.Data.Contracts;
 using OfflineOrderManager.Models.Data.Orders;
-using OfflineOrderManager.Models.Services.Registration;
-using OfflineOrderManager.Utils.AutoMapper.Contracts;
 
 namespace OfflineOrderManager.Models.Data.Users
 {
-    public class User : IMapFrom<UserServiceModel>
+    public class User : IEntity
     {
         public int Id { get; set; }
 

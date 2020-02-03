@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using OfflineOrderManager.Services.Contracts;
+using OfflineOrderManager.Web.Pages.Abstractions.Orders;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
-    public class AllModel : PageModel
+    public class AllModel : ListingOrderModel
     {
-        public void OnGet()
-        {
-
-        }
+        public AllModel(IEntityService entityService, IMappingService mapper) 
+            : base(entityService, mapper) { }
     }
 }
