@@ -32,7 +32,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             {
                 TempData["ErrorMessage"] = "You need to login first";
 
-                return RedirectToPage();
+                return RedirectToPage(new { id = this.Id });
             }
 
             this.entityService.DeleteBy<Order>(o => o.Id == this.Id);

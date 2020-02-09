@@ -33,7 +33,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             {
                 TempData["ErrorMessage"] = "You need to login first";
 
-                return RedirectToPage();
+                return RedirectToPage(new { id = this.Id });
             }
 
             var user = this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
@@ -49,7 +49,6 @@ namespace OfflineOrderManager.Web.Pages.Orders
             order.CustormerPhoneNumber = this.CustormerPhoneNumber;
             order.Comment = this.Comment;
             order.UserId = user.Id;
-            order.CreationDate = DateTime.Now;
             order.Status = this.Status;
             order.Author = user.Name;
             
