@@ -16,7 +16,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
         public void OnGet() { }
 
-        public async Task<IActionResult> OnPost()
+        public IActionResult OnPost()
         {
             if (!this.User.Identity.IsAuthenticated)
             {
@@ -42,7 +42,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 Author = user.Name
             };
 
-            await this.entityService.AddOrUpdate(model);
+            this.entityService.AddOrUpdate(model);
 
             return RedirectToPage("All");
         }

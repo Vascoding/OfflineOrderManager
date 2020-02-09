@@ -1,14 +1,62 @@
 ﻿@page
-@model OfflineOrderManager.Web.Pages.Orders.MyModel
+@model MyModel
 @{
     ViewData["Title"] = "Моите поръчки";
 }
 
 <h2>@ViewData["Title"]</h2>
 
+<form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>от</th>
+                <th>до</th>
+                <th>по статус</th>
+                <th>по име на продуктите</th>
+                <th>по коменар</th>
+                <th>по телефон</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="date" asp-for="From" value="" class="form-control" />
+                </td>
+                <td>
+                    <input type="date" asp-for="To" value="" class="form-control" />
+                </td>
+                <td>
+                    <select class="form-control" name="Status">
+                        <option class="bg-warning" selected>Всички</option>
+                        <option class="bg-warning" value="@Status.Waiting">Чакаща</option>
+                        <option class="bg-success" value="@Status.Accepted">Изпълнена</option>
+                        <option class="bg-danger" value="@Status.Refused">Отказана</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="ProductName" value="" class="form-control" />
+                </td>
+                <td>
+                    <input type="text" name="Comment" value="" class="form-control" />
+                </td>
+                <td>
+                    <input type="text" name="PhoneNumber" value="" class="form-control" />
+                </td>
+                <td>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Филтрирай</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
 <table class="table">
     <thead>
         <tr>
+            <th>Дата</th>
             <th>Автор</th>
             <th>Поръчка за</th>
             <th>Име на клиента</th>
@@ -17,14 +65,14 @@
             <th>Платена сума</th>
             <th>Оставащо за плащане</th>
             <th>Коментар</th>
-            <th>Статус</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Orders)
         {
-            <tr>
+            <tr class="@HtmlHeleper.GetClassByStatus(item.Status)">
+                <td>@item.CreationDate.ToString("dd/MM/yyyy")</td>
                 <td>@Html.DisplayFor(modelItem => item.Author)</td>
                 <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
                 <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
@@ -33,21 +81,27 @@
                 <td>@Html.DisplayFor(modelItem => item.Payed)</td>
                 <td>@Html.DisplayFor(modelItem => item.LeftToPay)</td>
                 <td>@Html.DisplayFor(modelItem => item.Comment)</td>
-                <td width="140">
-                    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                        <div class="form-group">
-                            <select class="form-control" name="Status">
-                                <option class="bg-warning" selected="@SelectedOptionHelper.IsSelected(Status.Waiting, item.Status)" value="@Status.Waiting">Чакаща</option>
-                                <option class="bg-success" selected="@SelectedOptionHelper.IsSelected(Status.Accepted, item.Status)" value="@Status.Accepted">Изпълнена</option>
-                                <option class="bg-danger" selected="@SelectedOptionHelper.IsSelected(Status.Refused, item.Status)" value="@Status.Refused">Отказана</option>
-                            </select>
-                            <button type="submit" asp-route-id="@item.Id" class="btn btn-primary">Смени</button>
+                <td class="container-fluid">
+                    <form id="statusForm" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select onchange="this.className=this.options[this.selectedIndex].className" class="bg-warning" name="Status">
+                                    <option class="bg-warning" selected="@HtmlHeleper.IsSelected(Status.Waiting, item.Status)" value="@Status.Waiting">Чакаща</option>
+                                    <option class="bg-success" selected="@HtmlHeleper.IsSelected(Status.Accepted, item.Status)" value="@Status.Accepted">Изпълнена</option>
+                                    <option class="bg-danger" selected="@HtmlHeleper.IsSelected(Status.Refused, item.Status)" value="@Status.Refused">Отказана</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" asp-route-id="@item.Id" class="btn-sm btn-primary">Промени</button>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="btn-sm btn-success" asp-page="./Edit" asp-route-id="@item.Id">Редакция</a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="btn-sm btn-danger" asp-page="./Delete" asp-route-id="@item.Id">Изтрий</a>
+                            </div>
                         </div>
                     </form>
-                </td>
-                <td width="200">
-                    <a class="btn btn-default" asp-page="./Edit" asp-route-id="@item.Id">Промени</a>
-                    <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Id">Изтрий</a>
                 </td>
             </tr>
         }

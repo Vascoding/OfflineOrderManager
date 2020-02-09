@@ -4,67 +4,69 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2 style="text-align:center">Редактиране на поръчка</h2>
 
 <div class="row">
-    <div class="col-md-4">
-        <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>Add new order</h4>
-                <h4>@TempData["ErrorMessage"]</h4>
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for="Id" hidden class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="ProductName">Поръчка за</label>
-                    <input asp-for="ProductName" class="form-control" />
-                    <span asp-validation-for="ProductName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CustomerName">Име на клиента</label>
-                    <input asp-for="CustomerName" class="form-control" />
-                    <span asp-validation-for="CustomerName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CustormerPhoneNumber">Телефон</label>
-                    <input asp-for="CustormerPhoneNumber" class="form-control" />
-                    <span asp-validation-for="CustormerPhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Amount">Уговорена сума на поръчаните продукти</label>
-                    <input asp-for="Amount" type="number" class="form-control" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Payed">Платена сума</label>
-                    <input asp-for="Payed" type="number" class="form-control" />
-                    <span asp-validation-for="Payed" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="LeftToPay">Оставащо за плащане</label>
-                    <input asp-for="LeftToPay" type="number" class="form-control" />
-                    <span asp-validation-for="LeftToPay" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Comment">Коментар</label>
-                    <input asp-for="Comment" type="text" class="form-control" />
-                    <span asp-validation-for="Comment" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Status">Статус</label>
-                    <select class="form-control" name="Status">
-                        <option class="bg-warning" selected="@SelectedOptionHelper.IsSelected(Status.Waiting, Model.Status)" value="@Status.Waiting">Чакаща</option>
-                        <option class="bg-success" selected="@SelectedOptionHelper.IsSelected(Status.Accepted, Model.Status)" value="@Status.Accepted">Изпълнена</option>
-                        <option class="bg-danger" selected="@SelectedOptionHelper.IsSelected(Status.Refused, Model.Status)" value="@Status.Refused">Отказана</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default">Промени</button>
-                </div>
-            </form>
-        </section>
+    <div class="col-md-12">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <section>
+                <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <h4>@TempData["ErrorMessage"]</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Id" hidden class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductName">Поръчка за</label>
+                        <input asp-for="ProductName" class="form-control" />
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomerName">Име на клиента</label>
+                        <input asp-for="CustomerName" class="form-control" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustormerPhoneNumber">Телефон</label>
+                        <input asp-for="CustormerPhoneNumber" class="form-control" />
+                        <span asp-validation-for="CustormerPhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Amount">Уговорена сума на поръчаните продукти</label>
+                        <input asp-for="Amount" type="number" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Payed">Платена сума</label>
+                        <input asp-for="Payed" type="number" class="form-control" />
+                        <span asp-validation-for="Payed" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LeftToPay">Оставащо за плащане</label>
+                        <input asp-for="LeftToPay" type="number" class="form-control" />
+                        <span asp-validation-for="LeftToPay" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Comment">Коментар</label>
+                        <input asp-for="Comment" type="text" class="form-control" />
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status">Статус</label>
+                        <select class="form-control" name="Status">
+                            <option class="bg-warning" selected="@HtmlHeleper.IsSelected(Status.Waiting, Model.Status)" value="@Status.Waiting">Чакаща</option>
+                            <option class="bg-success" selected="@HtmlHeleper.IsSelected(Status.Accepted, Model.Status)" value="@Status.Accepted">Изпълнена</option>
+                            <option class="bg-danger" selected="@HtmlHeleper.IsSelected(Status.Refused, Model.Status)" value="@Status.Refused">Отказана</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Промени</button>
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
 </div>
 

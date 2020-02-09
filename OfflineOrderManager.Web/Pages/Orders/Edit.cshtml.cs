@@ -29,7 +29,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             this.Status = order.Status;
         }
 
-        public async Task<IActionResult> OnPost()
+        public IActionResult OnPost()
         {
             if (!this.User.Identity.IsAuthenticated)
             {
@@ -56,7 +56,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             order.Author = user.Name;
             
 
-            await this.entityService.AddOrUpdate(order);
+            this.entityService.AddOrUpdate(order);
 
             return RedirectToPage("All");
         }

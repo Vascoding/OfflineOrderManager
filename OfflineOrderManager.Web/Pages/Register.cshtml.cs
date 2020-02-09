@@ -36,7 +36,7 @@ namespace OfflineOrderManager.Web.Pages
                 Password = this.ComputeSha256Hash(this.Password)
             };
 
-            await this.entityService.AddOrUpdate(model);
+            this.entityService.AddOrUpdate(model);
 
             await this.SignInAsync(model.Name);
 

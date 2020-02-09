@@ -17,20 +17,20 @@ namespace OfflineOrderManager.Services.Implementations
             this.dbContext = dbContext;
         }
 
-        public async Task AddOrUpdate<ТEntity>(ТEntity entity) where ТEntity : IEntity
+        public void AddOrUpdate<ТEntity>(ТEntity entity) where ТEntity : IEntity
         {
             dbContext.Update(entity);
 
-            await dbContext.SaveChangesAsync();
+            dbContext.SaveChanges();
         }
 
-        public async Task DeleteBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class
+        public void DeleteBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class
         {
             var entity = this.dbContext.Set<TEntity>().FirstOrDefault(predicate);
 
             this.dbContext.Remove(entity);
 
-            await dbContext.SaveChangesAsync();
+            dbContext.SaveChanges();
         }
 
         public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, IEntity => 

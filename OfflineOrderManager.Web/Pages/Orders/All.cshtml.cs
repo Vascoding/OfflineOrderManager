@@ -1,5 +1,6 @@
 ﻿using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
+using System.Collections.Generic;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {

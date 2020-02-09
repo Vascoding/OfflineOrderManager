@@ -7,7 +7,7 @@ namespace OfflineOrderManager.Services.Contracts
 {
     public interface IEntityService
     {
-        Task AddOrUpdate<TEntity>(TEntity model) where TEntity : IEntity;
+        void AddOrUpdate<TEntity>(TEntity model) where TEntity : IEntity;
 
         IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, IEntity;
 
@@ -15,6 +15,6 @@ namespace OfflineOrderManager.Services.Contracts
 
         TEntity GetBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class, IEntity;
 
-        Task DeleteBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class;
+        void DeleteBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class;
     }
 }
