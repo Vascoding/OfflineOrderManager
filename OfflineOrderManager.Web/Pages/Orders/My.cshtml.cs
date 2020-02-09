@@ -19,7 +19,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
         {
             var orders = entityService.GetAll<Order>(o => o.Author == this.User.Identity.Name);
 
-            this.Orders = orders.Select(this.mapper.Map<OrderViewModel>).ToList();
+            this.Orders = orders.Select(this.mapper.Map<OrderViewModel>).OrderByDescending(a => a.Id).ToList();
         }
     }
 }

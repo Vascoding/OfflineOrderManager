@@ -44,7 +44,7 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
             var orders = entityService.GetAll(filterDelegate);
 
-            this.Orders = orders.Select(this.mapper.Map<OrderViewModel>).ToList();
+            this.Orders = orders.Select(this.mapper.Map<OrderViewModel>).OrderByDescending(o => o.Id).ToList();
         }
 
         public IActionResult OnPost(int id, Dictionary<string, string> routeData)

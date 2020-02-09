@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using OfflineOrderManager.Models.Data.Orders;
 using OfflineOrderManager.Models.Enums;
 using OfflineOrderManager.Services.Contracts;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,8 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
         {
             this.entityService = entityService;
         }
+
+        public int Id { get; set; }
 
         public string ProductName { get; set; }
 

@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfflineOrderManager.Models.Data.Orders;
-using OfflineOrderManager.Models.Data.Users;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
-using System;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
-    public class EditModel : OrderModel
+    public class DeleteModel : OrderModel
     {
-        public EditModel(IEntityService entityService) 
+        public DeleteModel(IEntityService entityService)
             : base(entityService) { }
 
         public void OnGet(int id)
@@ -36,25 +35,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 return RedirectToPage();
             }
 
-            var user = this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
-
-            var order = this.entityService.GetBy<Order>(o => o.Id == this.Id);
-
-
-            order.ProductName = this.ProductName;
-            order.Amount = this.Amount;
-            order.Payed = this.Payed;
-            order.LeftToPay = this.Amount - this.Payed;
-            order.CustomerName = this.CustomerName;
-            order.CustormerPhoneNumber = this.CustormerPhoneNumber;
-            order.Comment = this.Comment;
-            order.UserId = user.Id;
-            order.CreationDate = DateTime.Now;
-            order.Status = this.Status;
-            order.Author = user.Name;
-            
-
-            this.entityService.AddOrUpdate(order);
+            this.entityService.DeleteBy<Order>(o => o.Id == this.Id);
 
             return RedirectToPage("All");
         }
