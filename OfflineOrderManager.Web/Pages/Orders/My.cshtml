@@ -85,7 +85,7 @@
                     <form id="statusForm" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                         <div class="row">
                             <div class="col-md-12">
-                                <select onchange="this.className=this.options[this.selectedIndex].className" class="bg-warning" name="Status">
+                                <select name="Status">
                                     <option class="bg-warning" selected="@HtmlHeleper.IsSelected(Status.Waiting, item.Status)" value="@Status.Waiting">Чакаща</option>
                                     <option class="bg-success" selected="@HtmlHeleper.IsSelected(Status.Accepted, item.Status)" value="@Status.Accepted">Изпълнена</option>
                                     <option class="bg-danger" selected="@HtmlHeleper.IsSelected(Status.Refused, item.Status)" value="@Status.Refused">Отказана</option>

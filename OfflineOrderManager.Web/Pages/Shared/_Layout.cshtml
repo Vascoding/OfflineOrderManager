@@ -30,19 +30,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-page="/Orders/All">All Orders</a></li>
-                    <li><a asp-page="/Orders/My">My Orders</a></li>
-                    <li><a asp-page="/Orders/Add">Add Order</a></li>
+                    <li><a asp-page="/Orders/All">Всички поръчки</a></li>
+                    <li><a asp-page="/Orders/My">Моите поръчки</a></li>
+                    <li><a asp-page="/Orders/Add">Добави поръчка</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Model.HttpContext.User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-page="/Login" asp-page-handler="Logout">Logout</a></li>
+                        <li><a asp-page="/Login" asp-page-handler="Logout">Изход</a></li>
                     }
                     else
                     {
-                        <li><a asp-page="/Register">Register</a></li>
-                        <li><a asp-page="/Login">Login</a></li>
+                        <li><a asp-page="/Register">Регистрация</a></li>
+                        <li><a asp-page="/Login">Вход</a></li>
                     }
                 </ul>
             </div>
