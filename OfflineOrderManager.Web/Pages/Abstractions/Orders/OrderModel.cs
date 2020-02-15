@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using OfflineOrderManager.Models.Data.Orders;
 using OfflineOrderManager.Models.Enums;
 using OfflineOrderManager.Services.Contracts;
 using System.ComponentModel.DataAnnotations;

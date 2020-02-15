@@ -15,7 +15,7 @@ using System.Linq.Expressions;
 namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 {
     [BindProperties]
-    public class ListingOrderModel : PageModel
+    public abstract class ListingOrderModel : PageModel
     {
         protected readonly IEntityService entityService;
         protected readonly IMappingService mapper;
@@ -58,11 +58,9 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
             return RedirectToPage();
         }
 
-        private Func<Order, bool> CreateFilterDelegate(OrdersFilterModel filter)
+        protected virtual Expression GenerateFilterExpression(OrdersFilterModel filter, ParameterExpression parameter)
         {
             var expression = ExpressionBuilder.BuildDefault();
-
-            var parameter = ExpressionBuilder.CreateParameter<Order>();
 
             if (filter.Status != null)
             {
@@ -80,7 +78,7 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
             if (filter.To != null)
             {
-                var body = ExpressionBuilder.LessThanOrEqual(parameter, "CreationDate", filter.To);
+                var body = ExpressionBuilder.LessThanOrEqual(parameter, "CreationDate", filter.To.Value.AddDays(1));
 
                 expression = ExpressionBuilder.AndAlso(expression, body);
             }
@@ -95,7 +93,7 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
             if (filter.ProductName != null)
             {
                 var body = ExpressionBuilder.ToLowerEqual(parameter, "ProductName", filter.ProductName);
-                
+
                 expression = ExpressionBuilder.AndAlso(expression, body);
             }
 
@@ -112,6 +110,15 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
                 expression = ExpressionBuilder.AndAlso(expression, body);
             }
+
+            return expression;
+        }
+
+        private Func<Order, bool> CreateFilterDelegate(OrdersFilterModel filter)
+        {
+            var parameter = ExpressionBuilder.CreateParameter<Order>();
+
+            var expression = this.GenerateFilterExpression(filter, parameter);
 
             return ExpressionBuilder.CreateLambda<Func<Order, bool>>(expression, parameter);
         }

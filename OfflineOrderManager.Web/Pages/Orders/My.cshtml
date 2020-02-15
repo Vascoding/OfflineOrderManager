@@ -15,6 +15,7 @@
                 <th>по статус</th>
                 <th>по име на продуктите</th>
                 <th>по коменар</th>
+                <th>по име на клиент</th>
                 <th>по телефон</th>
             </tr>
         </thead>
@@ -27,8 +28,8 @@
                     <input type="date" asp-for="To" value="" class="form-control" />
                 </td>
                 <td>
-                    <select class="form-control" name="Status">
-                        <option class="bg-warning" selected>Всички</option>
+                    <select class="form-control" name="Status" style="width:auto">
+                        <option selected>Всички</option>
                         <option class="bg-warning" value="@Status.Waiting">Чакаща</option>
                         <option class="bg-success" value="@Status.Accepted">Изпълнена</option>
                         <option class="bg-danger" value="@Status.Refused">Отказана</option>
@@ -39,6 +40,9 @@
                 </td>
                 <td>
                     <input type="text" name="Comment" value="" class="form-control" />
+                </td>
+                <td>
+                    <input type="text" name="CustomerName" value="" class="form-control" />
                 </td>
                 <td>
                     <input type="text" name="PhoneNumber" value="" class="form-control" />
@@ -81,11 +85,11 @@
                 <td>@Html.DisplayFor(modelItem => item.Payed)</td>
                 <td>@Html.DisplayFor(modelItem => item.LeftToPay)</td>
                 <td>@Html.DisplayFor(modelItem => item.Comment)</td>
-                <td class="container-fluid">
+                <td class="container-fluid" style="width:240px">
                     <form id="statusForm" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                         <div class="row">
                             <div class="col-md-12">
-                                <select name="Status">
+                                <select name="Status" class="form-group">
                                     <option class="bg-warning" selected="@HtmlHeleper.IsSelected(Status.Waiting, item.Status)" value="@Status.Waiting">Чакаща</option>
                                     <option class="bg-success" selected="@HtmlHeleper.IsSelected(Status.Accepted, item.Status)" value="@Status.Accepted">Изпълнена</option>
                                     <option class="bg-danger" selected="@HtmlHeleper.IsSelected(Status.Refused, item.Status)" value="@Status.Refused">Отказана</option>
@@ -97,7 +101,7 @@
                             <div class="col-md-4">
                                 <a class="btn-sm btn-success" asp-page="./Edit" asp-route-id="@item.Id">Редакция</a>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <a class="btn-sm btn-danger" asp-page="./Delete" asp-route-id="@item.Id">Изтрий</a>
                             </div>
                         </div>
@@ -107,7 +111,3 @@
         }
     </tbody>
 </table>
-
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}

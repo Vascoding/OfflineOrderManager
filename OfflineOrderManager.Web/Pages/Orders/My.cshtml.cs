@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OfflineOrderManager.Models.Data.Orders;
+﻿using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc;
 using OfflineOrderManager.Models.View.Filter;
-using OfflineOrderManager.Models.View.Orders;
 using OfflineOrderManager.Services.Contracts;
+using OfflineOrderManager.Web.Helpers;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
@@ -15,11 +13,20 @@ namespace OfflineOrderManager.Web.Pages.Orders
         public MyModel(IEntityService entityService, IMappingService mapper)
             : base(entityService, mapper) { }
 
-        public override void OnGet(OrdersFilterModel routeData)
+        protected override Expression GenerateFilterExpression(OrdersFilterModel filter, ParameterExpression parameter)
         {
-            var orders = entityService.GetAll<Order>(o => o.Author == this.User.Identity.Name);
+            var expression = base.GenerateFilterExpression(filter, parameter);
 
-            this.Orders = orders.Select(this.mapper.Map<OrderViewModel>).OrderByDescending(a => a.Id).ToList();
+            var user = this.User.Identity;
+
+            if (user.IsAuthenticated)
+            {
+                var body = ExpressionBuilder.Equal(parameter, "Author", user.Name);
+
+                expression = ExpressionBuilder.AndAlso(expression, body);
+            }
+
+            return expression;
         }
     }
 }

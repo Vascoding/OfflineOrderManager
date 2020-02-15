@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OfflineOrderManager.Models.Data.Orders;
-using OfflineOrderManager.Models.Data.Users;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
-using System;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
@@ -36,10 +34,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 return RedirectToPage(new { id = this.Id });
             }
 
-            var user = this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
-
             var order = this.entityService.GetBy<Order>(o => o.Id == this.Id);
-
 
             order.ProductName = this.ProductName;
             order.Amount = this.Amount;
@@ -48,9 +43,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             order.CustomerName = this.CustomerName;
             order.CustormerPhoneNumber = this.CustormerPhoneNumber;
             order.Comment = this.Comment;
-            order.UserId = user.Id;
             order.Status = this.Status;
-            order.Author = user.Name;
             
 
             this.entityService.AddOrUpdate(order);

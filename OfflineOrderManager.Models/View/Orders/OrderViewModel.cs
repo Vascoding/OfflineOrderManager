@@ -30,5 +30,7 @@ namespace OfflineOrderManager.Models.View.Orders
         public string Author { get; set; }
 
         public int UserId { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
