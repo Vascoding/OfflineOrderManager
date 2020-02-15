@@ -31,7 +31,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Orders/All">Всички поръчки</a></li>
-                    <li><a asp-page="/Orders/My">Моите поръчки</a></li>
+                    @if (Model.HttpContext.User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-page="/Orders/My">Моите поръчки</a></li>
+                    }
                     <li><a asp-page="/Orders/Add">Добави поръчка</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
