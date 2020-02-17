@@ -17,9 +17,9 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
             this.Id = order.Id;
             this.ProductName = order.ProductName;
-            this.Amount = order.Amount.ToString();
-            this.Payed = order.Payed.ToString();
-            this.LeftToPay = order.LeftToPay.ToString();
+            this.Amount = order.Amount.ToString(CultureInfo.InvariantCulture);
+            this.Payed = order.Payed.ToString(CultureInfo.InvariantCulture);
+            this.LeftToPay = order.LeftToPay.ToString(CultureInfo.InvariantCulture);
             this.Comment = order.Comment;
             this.CustomerName = order.CustomerName;
             this.CustormerPhoneNumber = order.CustormerPhoneNumber;

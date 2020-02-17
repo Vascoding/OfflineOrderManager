@@ -32,12 +32,12 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Amount">Уговорена сума на поръчаните продукти</label>
-                        <input asp-for="Amount" type="number" step=any class="form-control" />
+                        <input asp-for="Amount" type="number" step=any value="0.00" class="form-control" />
                         <span asp-validation-for="Amount" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Payed">Платена сума</label>
-                        <input asp-for="Payed" type="number" step=any class="form-control" />
+                        <input asp-for="Payed" type="number" step=any value="0.00" class="form-control" />
                         <span asp-validation-for="Payed" class="text-danger"></span>
                     </div>
                     <div class="form-group">
