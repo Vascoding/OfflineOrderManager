@@ -2,6 +2,7 @@
 using OfflineOrderManager.Models.Data.Orders;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
+using System.Globalization;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
@@ -16,9 +17,9 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
             this.Id = order.Id;
             this.ProductName = order.ProductName;
-            this.Amount = order.Amount;
-            this.Payed = order.Payed;
-            this.LeftToPay = order.LeftToPay;
+            this.Amount = order.Amount.ToString();
+            this.Payed = order.Payed.ToString();
+            this.LeftToPay = order.LeftToPay.ToString();
             this.Comment = order.Comment;
             this.CustomerName = order.CustomerName;
             this.CustormerPhoneNumber = order.CustormerPhoneNumber;
@@ -36,10 +37,13 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
             var order = this.entityService.GetBy<Order>(o => o.Id == this.Id);
 
+            decimal.TryParse(this.Amount.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount);
+            decimal.TryParse(this.Payed.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal payed);
+
             order.ProductName = this.ProductName;
-            order.Amount = this.Amount;
-            order.Payed = this.Payed;
-            order.LeftToPay = this.Amount - this.Payed;
+            order.Amount = amount;
+            order.Payed = payed;
+            order.LeftToPay = amount - payed;
             order.CustomerName = this.CustomerName;
             order.CustormerPhoneNumber = this.CustormerPhoneNumber;
             order.Comment = this.Comment;

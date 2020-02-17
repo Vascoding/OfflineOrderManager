@@ -20,11 +20,11 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
         public string ProductName { get; set; }
 
-        public decimal Amount { get; set; }
+        public string Amount { get; set; }
 
-        public decimal Payed { get; set; }
+        public string Payed { get; set; }
 
-        public decimal LeftToPay { get; set; }
+        public string LeftToPay { get; set; }
 
         public string Comment { get; set; }
 

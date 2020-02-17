@@ -64,7 +64,8 @@ namespace OfflineOrderManager.Web
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
+            
+            app.UseRequestLocalization();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

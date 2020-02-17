@@ -5,6 +5,7 @@ using OfflineOrderManager.Models.Data.Users;
 using OfflineOrderManager.Models.Data.Orders;
 using System;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
+using System.Globalization;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
@@ -27,12 +28,15 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
             var user = this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
 
+            decimal.TryParse(this.Amount.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount);
+            decimal.TryParse(this.Payed.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal payed);
+
             var model = new Order
             {
                 ProductName = this.ProductName,
-                Amount = this.Amount,
-                Payed = this.Payed,
-                LeftToPay = this.Amount - this.Payed,
+                Amount = amount,
+                Payed = payed,
+                LeftToPay = amount - payed,
                 CustomerName = this.CustomerName,
                 CustormerPhoneNumber = this.CustormerPhoneNumber,
                 Comment = this.Comment,
