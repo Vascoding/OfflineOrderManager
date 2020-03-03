@@ -6,6 +6,7 @@ using OfflineOrderManager.Models.Enums;
 using OfflineOrderManager.Models.View.Filter;
 using OfflineOrderManager.Models.View.Orders;
 using OfflineOrderManager.Services.Contracts;
+using OfflineOrderManager.Web.Caches;
 using OfflineOrderManager.Web.Helpers;
 using System;
 using System.Collections.Generic;
@@ -30,21 +31,35 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
         public DateTime To { get; set; }
 
-        public List<string> Authors { get; set; }
-
         public Status Status { get; set; }
 
-        public List<OrderViewModel> Orders { get; set; }
+        public int PreviousPage => this.CurrentPage <= 1 ? 1 : this.CurrentPage - 1;
 
-        public virtual void OnGet(OrdersFilterModel filter)
+        public int CurrentPage { get; set; } = 1;
+
+        public int NextPage => 
+            this.CurrentPage == this.TotalPages ? this.TotalPages : this.CurrentPage + 1;
+
+        public int TotalPages { get; set; }
+
+        public int PageSize => 3;
+
+        public virtual void OnGet(OrdersFilterModel filter, int currentPage = 1)
         {
-            this.Authors = this.entityService.GetAll<User>().Select(u => u.Name).ToList();
+            this.CurrentPage = currentPage;
+
+            UsersCache.Items = this.entityService.GetAll<User>().Select(u => u.Name).ToList();
 
             var filterDelegate = this.CreateFilterDelegate(filter);
 
-            var orders = entityService.GetAll(filterDelegate);
+            var orders = entityService.GetAll(filterDelegate)
+                .OrderByDescending(o => o.Id)
+                .Select(this.mapper.Map<OrderViewModel>)
+                .ToList();
 
-            this.Orders = orders.Select(this.mapper.Map<OrderViewModel>).OrderByDescending(o => o.Id).ToList();
+            this.TotalPages = (int)Math.Ceiling((double)orders.Count() / PageSize);
+
+            OrdersCache.Items = orders;
         }
 
         public IActionResult OnPost(int id, Dictionary<string, string> routeData)
@@ -57,6 +72,9 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
             return RedirectToPage();
         }
+
+        public void OnGetPageChange(int currentPage = 1) => 
+            this.CurrentPage = currentPage;
 
         protected virtual Expression GenerateFilterExpression(OrdersFilterModel filter, ParameterExpression parameter)
         {
@@ -107,6 +125,13 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
             if (filter.PhoneNumber != null)
             {
                 var body = ExpressionBuilder.ToLowerEqual(parameter, "CustormerPhoneNumber", filter.PhoneNumber);
+
+                expression = ExpressionBuilder.AndAlso(expression, body);
+            }
+
+            if (filter.CustomerName != null)
+            {
+                var body = ExpressionBuilder.ToLowerEqual(parameter, "CustomerName", filter.CustomerName);
 
                 expression = ExpressionBuilder.AndAlso(expression, body);
             }

@@ -20,5 +20,7 @@ namespace OfflineOrderManager.Models.View.Filter
         public string Comment { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public string CustomerName { get; set; }
     }
 }

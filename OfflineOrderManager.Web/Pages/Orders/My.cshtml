@@ -73,7 +73,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Orders)
+        @foreach (var item in OrdersCache.GetAllByPage(Model.CurrentPage, Model.PageSize))
         {
             <tr class="@HtmlHeleper.GetClassByStatus(item.Status)">
                 <td>@item.CreationDate.ToString("dd/MM/yyyy")</td>
@@ -111,3 +111,18 @@
         }
     </tbody>
 </table>
+
+<ul class="pagination">
+    <li class="@(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+        <a asp-route-currentPage="@Model.PreviousPage" asp-page-handler="PageChange"
+           aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </li>
+    <li class="@(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+        <a asp-route-currentPage="@Model.NextPage" asp-page-handler="PageChange"
+           aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </li>
+</ul>
