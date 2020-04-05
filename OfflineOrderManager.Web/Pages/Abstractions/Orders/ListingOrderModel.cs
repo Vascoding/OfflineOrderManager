@@ -42,7 +42,7 @@ namespace OfflineOrderManager.Web.Pages.Abstractions.Orders
 
         public int TotalPages { get; set; }
 
-        public int PageSize => 3;
+        public int PageSize => 50;
 
         public virtual void OnGet(OrdersFilterModel filter, int currentPage = 1)
         {
