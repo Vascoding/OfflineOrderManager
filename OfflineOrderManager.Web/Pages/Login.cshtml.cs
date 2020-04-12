@@ -17,7 +17,7 @@ namespace OfflineOrderManager.Web.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            var user = this.entityService.GetBy<User>(u => u.Name == this.Name && u.Password == this.ComputeSha256Hash(this.Password));
+            var user = await this.entityService.GetBy<User>(u => u.Name == this.Name && u.Password == this.ComputeSha256Hash(this.Password));
 
             if (user == null)
             {

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OfflineOrderManager.Data;
 using OfflineOrderManager.Models.Data.Contracts;
 using OfflineOrderManager.Services.Contracts;
+using OfflineOrderManager.Services.Extensions;
 
 namespace OfflineOrderManager.Services.Implementations
 {
@@ -11,38 +15,36 @@ namespace OfflineOrderManager.Services.Implementations
     {
         private readonly OfflineOrderManagerDbContext dbContext;
 
-        public EntityService(OfflineOrderManagerDbContext dbContext)
-        {
+        public EntityService(OfflineOrderManagerDbContext dbContext) =>
             this.dbContext = dbContext;
-        }
 
-        public void AddOrUpdate<ТEntity>(ТEntity entity) where ТEntity : IEntity
+        public async Task AddOrUpdate<ТEntity>(ТEntity entity) where ТEntity : class, IEntity
         {
             dbContext.Update(entity);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public void DeleteBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class
+        public async Task DeleteBy<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity
         {
-            var entity = this.dbContext.Set<TEntity>().FirstOrDefault(predicate);
+            var entity = await this.dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
 
             this.dbContext.Remove(entity);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, IEntity => 
-            this.dbContext.Set<TEntity>()
-                .ToList();
+        public async Task<IEnumerable<TEntity>> GetAll<TEntity>() where TEntity : class, IEntity => 
+            await this.dbContext.Set<TEntity>()
+                .ToListAsync();
 
-        public IEnumerable<TEntity> GetAll<TEntity>(Func<TEntity, bool> predicate) where TEntity : class => 
-            this.dbContext.Set<TEntity>()
+        public async Task<IEnumerable<TEntity>> GetAll<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity => 
+            await this.dbContext.Set<TEntity>()
                 .Where(predicate)
-                .ToList();
+                .ToListAsync();
 
-        public TEntity GetBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class, IEntity =>
-            this.dbContext.Set<TEntity>()
-                .FirstOrDefault(predicate);
+        public async Task<TEntity> GetBy<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity =>
+            await this.dbContext.Set<TEntity>()
+            .FirstOrDefaultAsync(predicate);
     }
 }

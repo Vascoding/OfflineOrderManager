@@ -3,6 +3,7 @@ using OfflineOrderManager.Models.Data.Orders;
 using OfflineOrderManager.Services.Contracts;
 using OfflineOrderManager.Web.Pages.Abstractions.Orders;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace OfflineOrderManager.Web.Pages.Orders
 {
@@ -11,9 +12,9 @@ namespace OfflineOrderManager.Web.Pages.Orders
         public EditModel(IEntityService entityService) 
             : base(entityService) { }
 
-        public void OnGet(int id)
+        public async Task OnGet(int id)
         {
-            var order = this.entityService.GetBy<Order>(o => o.Id == id);
+            var order = await this.entityService.GetBy<Order>(o => o.Id == id);
 
             this.Id = order.Id;
             this.ProductName = order.ProductName;
@@ -26,7 +27,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             this.Status = order.Status;
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!this.User.Identity.IsAuthenticated)
             {
@@ -35,7 +36,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 return RedirectToPage(new { id = this.Id });
             }
 
-            var order = this.entityService.GetBy<Order>(o => o.Id == this.Id);
+            var order = await this.entityService.GetBy<Order>(o => o.Id == this.Id);
 
             decimal.TryParse(this.Amount.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount);
             decimal.TryParse(this.Payed.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal payed);
@@ -50,7 +51,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
             order.Status = this.Status;
             
 
-            this.entityService.AddOrUpdate(order);
+            await this.entityService.AddOrUpdate(order);
 
             return RedirectToPage("All");
         }

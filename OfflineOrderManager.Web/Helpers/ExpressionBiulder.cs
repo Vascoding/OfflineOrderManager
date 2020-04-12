@@ -15,10 +15,6 @@ namespace OfflineOrderManager.Web.Helpers
         public static Expression AndAlso(Expression expression, Expression binaryExpression) =>
             Expression.AndAlso(expression, binaryExpression);
 
-        public static TLambda CreateLambda<TLambda>(Expression expression, ParameterExpression parameter) =>
-            Expression.Lambda<TLambda>(expression, new[] { parameter })
-            .Compile();
-
         public static Expression Equal(ParameterExpression parameter, string propertyName, object value)
         {
             var member = Expression.Property(parameter, propertyName);
@@ -28,7 +24,7 @@ namespace OfflineOrderManager.Web.Helpers
             return Expression.Equal(member, constant);
         }
 
-        public static Expression ToLowerEqual(ParameterExpression parameter, string propertyName, object value)
+        public static Expression CaseInsensitiveCompare(ParameterExpression parameter, string propertyName, object value)
         {
             var property = Expression.Property(parameter, propertyName);
             

@@ -21,7 +21,7 @@ namespace OfflineOrderManager.Web.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            var user = this.entityService.GetBy<User>(u => u.Name == this.Name);
+            var user = await this.entityService.GetBy<User>(u => u.Name == this.Name);
 
             if (user != null)
             {
@@ -36,7 +36,7 @@ namespace OfflineOrderManager.Web.Pages
                 Password = this.ComputeSha256Hash(this.Password)
             };
 
-            this.entityService.AddOrUpdate(model);
+            await this.entityService.AddOrUpdate(model);
 
             await this.SignInAsync(model.Name);
 

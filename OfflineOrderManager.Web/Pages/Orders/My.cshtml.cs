@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OfflineOrderManager.Models.View.Filter;
 using OfflineOrderManager.Services.Contracts;
@@ -13,20 +14,14 @@ namespace OfflineOrderManager.Web.Pages.Orders
         public MyModel(IEntityService entityService, IMappingService mapper)
             : base(entityService, mapper) { }
 
-        protected override Expression GenerateFilterExpression(OrdersFilterModel filter, ParameterExpression parameter)
+        public override async Task OnGet(OrdersFilterModel filter, int currentPage = 1)
         {
-            var expression = base.GenerateFilterExpression(filter, parameter);
-
-            var user = this.User.Identity;
-
-            if (user.IsAuthenticated)
+            if (this.User.Identity.IsAuthenticated)
             {
-                var body = ExpressionBuilder.Equal(parameter, "Author", user.Name);
-
-                expression = ExpressionBuilder.AndAlso(expression, body);
+                filter.Author = User.Identity.Name;
             }
 
-            return expression;
+            await base.OnGet(filter, currentPage);
         }
     }
 }

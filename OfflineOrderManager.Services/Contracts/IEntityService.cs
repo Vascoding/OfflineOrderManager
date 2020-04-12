@@ -1,19 +1,21 @@
 ﻿using OfflineOrderManager.Models.Data.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace OfflineOrderManager.Services.Contracts
 {
     public interface IEntityService
     {
-        void AddOrUpdate<TEntity>(TEntity model) where TEntity : IEntity;
+        Task AddOrUpdate<TEntity>(TEntity model) where TEntity : class, IEntity;
 
-        IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, IEntity;
+        Task<IEnumerable<TEntity>> GetAll<TEntity>() where TEntity : class, IEntity;
 
-        IEnumerable<TEntity> GetAll<TEntity>(Func<TEntity, bool> predicate) where TEntity : class;
+        Task<IEnumerable<TEntity>> GetAll<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity;
 
-        TEntity GetBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class, IEntity;
+        Task<TEntity> GetBy<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity;
 
-        void DeleteBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class;
+        Task DeleteBy<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity;
     }
 }

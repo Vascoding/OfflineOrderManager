@@ -17,7 +17,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
 
         public void OnGet() { }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!this.User.Identity.IsAuthenticated)
             {
@@ -26,7 +26,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 return RedirectToPage();
             }
 
-            var user = this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
+            var user = await this.entityService.GetBy<User>(u => u.Name == this.User.Identity.Name);
 
             decimal.TryParse(this.Amount.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount);
             decimal.TryParse(this.Payed.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal payed);
@@ -46,7 +46,7 @@ namespace OfflineOrderManager.Web.Pages.Orders
                 Author = user.Name
             };
 
-            this.entityService.AddOrUpdate(model);
+            await this.entityService.AddOrUpdate(model);
 
             return RedirectToPage("All");
         }
